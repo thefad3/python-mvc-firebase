@@ -4,16 +4,12 @@ from flask import render_template
 from flask import request
 from flask import session
 from flask import redirect
+import json
 import uuid 
 import hashlib
 from firebase import firebase
 firebase = firebase.FirebaseApplication('https://flaskmvc.firebaseio.com/users/', None)
 app = Flask(__name__)
-
-
-@app.route('/')
-def index():
-    return render_template('index.html')
 
 @app.route('/signupAction', methods=['GET', 'POST'])
 def addUser():
@@ -33,20 +29,12 @@ def addUser():
         'usern': username,
         'userp': password  
         }
-        #{'uid' : udi}
         )
         return redirect('/protected')
     else:
         return redirect('/signup')
-        
 
-@app.route('/protected')
-def protect():
-    return render_template('protected.html')
 
-@app.route('/login')
-def loginPage():
-    return render_template('login.html')
     
 @app.route('/loginAction', methods=['GET', 'POST'])
 def loginAction():
@@ -55,11 +43,29 @@ def loginAction():
     else:
         return redirect('/signup')
         
+#Page Renderings below
+#Trying to seperate the logic of the system from the display 
+#Most page route will return just a render template or the HTML
 
 @app.route('/signup')
 def regForm():
     return render_template('adduser.html')
-    
+
+@app.route('/protected')
+def protect():
+    udi = 'f0d549c6-eef1-4ca5-8024-7bd2db5bbd34'
+    #Calls the location by the defined var
+    #Need to pass int he ID Some how...
+    userInfo = firebase.get(udi, None)
+    return render_template('protected.html', data=userInfo)
+
+@app.route('/login')
+def loginPage():
+    return render_template('login.html')
+
+@app.route('/')
+def index():
+    return render_template('index.html')
 
     
         
