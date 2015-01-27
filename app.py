@@ -4,10 +4,10 @@ from flask import render_template
 from flask import request
 from flask import session
 from flask import redirect
-import uuid
+import uuid 
 import hashlib
 from firebase import firebase
-firebase = firebase.FirebaseApplication('https://flaskmvc.firebaseio.com/', None)
+firebase = firebase.FirebaseApplication('https://flaskmvc.firebaseio.com/users/', None)
 app = Flask(__name__)
 
 
@@ -18,6 +18,8 @@ def index():
 @app.route('/signupAction', methods=['GET', 'POST'])
 def addUser():
     if request.method == 'POST':
+        idx = uuid.uuid4()
+        uid = str(idx)
         password = request.form['password']
         username = request.form['username']
         #Hash that Passsword
@@ -25,25 +27,34 @@ def addUser():
         sha1.update(password)
         password = sha1.hexdigest()
         #Database Directive
-        firebase.post('/users/',
-        #Create Sub categories
-        #Careful, looks like javascript xD
+        firebase.post(uid,
         {
+        'uid': uid,
         'usern': username,
-        'userp': password    
+        'userp': password  
         }
+        #{'uid' : udi}
         )
-        #session["logged"] = 1
         return redirect('/protected')
     else:
         return redirect('/signup')
         
 
-        
 @app.route('/protected')
 def protect():
     return render_template('protected.html')
 
+@app.route('/login')
+def loginPage():
+    return render_template('login.html')
+    
+@app.route('/loginAction', methods=['GET', 'POST'])
+def loginAction():
+    if request.method == 'POST':
+        return 'dkjhfk'
+    else:
+        return redirect('/signup')
+        
 
 @app.route('/signup')
 def regForm():
