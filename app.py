@@ -2,14 +2,16 @@ import os
 from flask import Flask
 from flask import render_template
 from flask import request
-from flask import session
+from flask import session, redirect, url_for, escape
 from flask import redirect
 import json
 import uuid 
 import hashlib
 from firebase import firebase
-firebase = firebase.FirebaseApplication('https://flaskmvc.firebaseio.com/users/', None)
+from firebase_token_generator import create_token
+firebase = firebase.FirebaseApplication('https://flaskmvc.firebaseio.com/', None)
 app = Flask(__name__)
+app.secret_key = "baconMang"
 
 @app.route('/signupAction', methods=['GET', 'POST'])
 def addUser():
@@ -18,30 +20,32 @@ def addUser():
         uid = str(idx)
         password = request.form['password']
         username = request.form['username']
+        dbUrl = '/users/' + username
         #Hash that Passsword
         sha1 = hashlib.sha1()
         sha1.update(password)
         password = sha1.hexdigest()
         #Database Directive
-        firebase.post(uid,
+        firebase.post(dbUrl,
         {
         'uid': uid,
         'usern': username,
         'userp': password  
         }
         )
-        return redirect('/protected')
+        #session['logged']
+        return redirect('/login')
     else:
         return redirect('/signup')
 
 
-    
 @app.route('/loginAction', methods=['GET', 'POST'])
 def loginAction():
-    if request.method == 'POST':
-        return 'dkjhfk'
-    else:
-        return redirect('/signup')
+    firebase = firebase.FirebaseApplication('https://flaskmvc.firebaseio.com/', None)
+    authentication = firebase.FirebaseAuthentication('x2uoh7WO7nzWKhgijadq18IPGbOTKRFxHJ4pX1JA', 'chrisl')
+    print uid
+
+
         
 #Page Renderings below
 #Trying to seperate the logic of the system from the display 
@@ -53,9 +57,10 @@ def regForm():
 
 @app.route('/protected')
 def protect():
-    udi = 'f0d549c6-eef1-4ca5-8024-7bd2db5bbd34'
+    #udi = session['logged']
     #Calls the location by the defined var
     #Need to pass int he ID Some how...
+    udi = '/users/chrisl'
     userInfo = firebase.get(udi, None)
     return render_template('protected.html', data=userInfo)
 
@@ -77,3 +82,4 @@ def index():
 app.run(host=os.getenv('IP', '0.0.0.0'), port=int(os.getenv('PORT', 8080)))
 if __name__ == '__main__':
     app.run()
+    app.debug(True)
