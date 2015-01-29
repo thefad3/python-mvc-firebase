@@ -13,8 +13,8 @@ from firebase_token_generator import create_token
 app = Flask(__name__)
 app.secret_key = "baconMang"
 fbAuthSecretKey = 'x2uoh7WO7nzWKhgijadq18IPGbOTKRFxHJ4pX1JA'
-auth = firebase.FirebaseAuthentication(fbAuthSecretKey, 'thefad3@gmail.com', 'usr123')
-firebase = firebase.FirebaseApplication('https://flaskmvc.firebaseio.com/', auth)
+#auth = firebase.FirebaseAuthentication(fbAuthSecretKey, 'thefad3@gmail.com', 'fsdf')
+firebase = firebase.FirebaseApplication('https://flaskmvc.firebaseio.com/')
 
 @app.route('/signupAction', methods=['GET', 'POST'])
 def addUser():
@@ -42,6 +42,10 @@ def addUser():
 
 @app.route('/loginAction')
 def loginAction():
+    password = request.form['password']
+    username = request.form['username']
+    auth = firebase.FirebaseAuthentication(fbAuthSecretKey, 'thefad3@gmail.com', 'fsdf')
+    firebase = firebase.FirebaseApplication('https://flaskmvc.firebaseio.com/', auth)
     #Using protected vars were able to return tokens based on what we want to get
     #Prints or "returns" long string of information but can be decoded with json decoder
     #Next to conform data
