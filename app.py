@@ -40,18 +40,26 @@ def addUser():
         return redirect('/signup')
 
 
-@app.route('/loginAction')
+@app.route('/loginAction', methods=['GET', 'POST'])
 def loginAction():
-    password = request.form['password']
-    username = request.form['username']
-    auth = firebase.FirebaseAuthentication(fbAuthSecretKey, 'thefad3@gmail.com', 'fsdf')
-    firebase = firebase.FirebaseApplication('https://flaskmvc.firebaseio.com/', auth)
+    if request.method == 'POST':
+        #This is the only part of the application that can say "Hey, heres your key"
+        #password = request.form['password']
+        #username = request.form['username']
+        #sha1 = hashlib.sha1()
+        #sha1.update(password)
+        #password = sha1.hexdigest()
+        #auth = firebase.FirebaseAuthentication(fbAuthSecretKey, username, password)
+        #firebase = firebase.FirebaseApplication('https://flaskmvc.firebaseio.com/', auth)
+        uVer = firebase.get('/users', 'vvvfr0ot')
+        return uVer['usern']
+    else:
+        return redirect('/login')
     #Using protected vars were able to return tokens based on what we want to get
     #Prints or "returns" long string of information but can be decoded with json decoder
     #Next to conform data
-    firebase.auth = auth
-    user = auth.get_user()
-    return user.firebase_auth_token
+    #user = auth.get_user()
+    #return user.firebase_auth_token
 
   
 #Page Renderings below
