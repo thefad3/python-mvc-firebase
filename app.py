@@ -10,9 +10,11 @@ import hashlib
 from firebase import firebase
 from pprint import pprint
 from firebase_token_generator import create_token
-firebase = firebase.FirebaseApplication('https://flaskmvc.firebaseio.com/', None)
 app = Flask(__name__)
 app.secret_key = "baconMang"
+fbAuthSecretKey = 'x2uoh7WO7nzWKhgijadq18IPGbOTKRFxHJ4pX1JA'
+auth = firebase.FirebaseAuthentication(fbAuthSecretKey, 'thefad3@gmail.com', 'usr123')
+firebase = firebase.FirebaseApplication('https://flaskmvc.firebaseio.com/', auth)
 
 @app.route('/signupAction', methods=['GET', 'POST'])
 def addUser():
@@ -21,33 +23,30 @@ def addUser():
         uid = str(idx)
         password = request.form['password']
         username = request.form['username']
-        dbUrl = '/users/' + username
         #Hash that Passsword
         sha1 = hashlib.sha1()
         sha1.update(password)
         password = sha1.hexdigest()
         #Database Directive
-        firebase.put(dbUrl, uid,
+        firebase.put('/users', username,
         {
         'uid': uid,
         'usern': username,
         'userp': password  
         }
         )
-        #session['logged']
         return redirect('/login')
     else:
         return redirect('/signup')
 
 
-@app.route('/loginAction', methods=['GET', 'POST'])
+@app.route('/loginAction')
 def loginAction():
-    authentication = firebase.FirebaseAuthentication('x2uoh7WO7nzWKhgijadq18IPGbOTKRFxHJ4pX1JA', 'chrisl')
-    firebase = firebase.FirebaseApplication('https://flaskmvc.firebaseio.com/', authentication)
-    print authentication
+    firebase.auth = auth
+    user = auth.get_user()
+    return user.firebase_auth_token
 
-
-        
+  
 #Page Renderings below
 #Trying to seperate the logic of the system from the display 
 #Most page route will return just a render template or the HTML
