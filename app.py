@@ -13,12 +13,11 @@ from firebase_token_generator import create_token
 app = Flask(__name__)
 app.secret_key = "baconMang"
 firebase = firebase.FirebaseApplication('https://flaskmvc.firebaseio.com/', None)
-fbAuthSecretKey = 'x2uoh7WO7nzWKhgijadq18IPGbOTKRFxHJ4pX1JA'
-#auth = firebase.FirebaseAuthentication(fbAuthSecretKey, 'thefad3@gmail.com', 'fsdf')
 
 @app.route('/signupAction', methods=['GET', 'POST'])
 def addUser():
     if request.method == 'POST':
+        #Generates Random UID for Database
         idx = uuid.uuid4()
         uid = str(idx)
         password = request.form['password']
@@ -42,7 +41,9 @@ def addUser():
 @app.route('/addAction', methods=['GET', 'POST'])
 def addSecondary():
     if request.method == 'POST':
+        #Checking for session before allowing on Login Section
         if session['session']:
+            #Generates Random UID for Database
             idx = uuid.uuid4()
             uid = str(idx)
             password = request.form['password']
@@ -82,7 +83,6 @@ def loginAction():
 #Page Renderings below
 #Trying to seperate the logic of the system from the display 
 #Most page route will return just a render template or the HTML
-
 @app.route('/signup')
 def regForm():
     return render_template('adduser.html')
@@ -97,9 +97,12 @@ def protect():
 
 @app.route('/delete/<id>')
 def delete(id):
-    firebase.delete('/users', id)
-    return redirect("/protected")
-    
+    if session['session']:
+        firebase.delete('/users', id)
+        return redirect("/protected")
+    else: 
+        return redirect('/login')
+        
 @app.route('/adduser')
 def addPage():
     if session['session']:
