@@ -42,6 +42,9 @@ def addUser():
 
 @app.route('/loginAction')
 def loginAction():
+    #Using protected vars were able to return tokens based on what we want to get
+    #Prints or "returns" long string of information but can be decoded with json decoder
+    #Next to conform data
     firebase.auth = auth
     user = auth.get_user()
     return user.firebase_auth_token
