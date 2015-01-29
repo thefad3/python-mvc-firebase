@@ -66,10 +66,15 @@ def regForm():
 @app.route('/protected')
 def protect():
     if session['session']:
-        data = firebase.get('/users', session['session'])
+        data = firebase.get('/users', None)
         return render_template('protected.html', data=data)
     else:
         return redirect('/login')
+
+@app.route('/delete/<id>')
+def delete(id):
+    firebase.delete('/users', id)
+    return redirect("/protected")
 
 @app.route('/login')
 def loginPage():

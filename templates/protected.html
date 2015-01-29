@@ -7,7 +7,26 @@
 <body>
 <div class="container">
 <div class="row">
-    <h3>Welcome to the protected page {{ data['usern'] }}!</h3>
+    <h3>Welcome to the protected page!</h3>
+    
+            <hr>
+        <h6><a href="/adduser" class="btn btn-primary btn-lg">+ Add User</a></h6>
+        <br>
+        <table class="table table-hover">
+            <tr>
+                    <td><b>Username:</b></td>
+                    <td><b>Update:</b></td>
+                    <td><b>Delete:</b></td>
+            </tr>
+        {% for x in data: %}
+            <tr>
+                    <td>{{ x }}</td>
+                    <td><a href="/updateForm/{{x}}" class="btn btn-primary">Edit</a></td>
+                    <td><a href="/delete/{{x}}" class="btn btn-danger" onClick='javascript:alert("This will Delete the Row");'>Delete</a></td>
+            </tr>
+
+        {% endfor %}
+            </table>
 <div class="col-md-4"></div>
         <div class="col-md-4">
             <a href="/logout" class="btn btn-primary btn-lg btn-block">Logout Bruh</a>
