@@ -12,9 +12,9 @@ from pprint import pprint
 from firebase_token_generator import create_token
 app = Flask(__name__)
 app.secret_key = "baconMang"
+firebase = firebase.FirebaseApplication('https://flaskmvc.firebaseio.com/', None)
 fbAuthSecretKey = 'x2uoh7WO7nzWKhgijadq18IPGbOTKRFxHJ4pX1JA'
 #auth = firebase.FirebaseAuthentication(fbAuthSecretKey, 'thefad3@gmail.com', 'fsdf')
-firebase = firebase.FirebaseApplication('https://flaskmvc.firebaseio.com/')
 
 @app.route('/signupAction', methods=['GET', 'POST'])
 def addUser():
@@ -28,7 +28,7 @@ def addUser():
         sha1.update(password)
         password = sha1.hexdigest()
         #Database Directive
-        firebase.put('/users', username,
+        fb.put('/users', username,
         {
         'uid': uid,
         'usern': username,
@@ -43,24 +43,17 @@ def addUser():
 @app.route('/loginAction', methods=['GET', 'POST'])
 def loginAction():
     if request.method == 'POST':
-        #This is the only part of the application that can say "Hey, heres your key"
-        #password = request.form['password']
-        #username = request.form['username']
-        #sha1 = hashlib.sha1()
-        #sha1.update(password)
-        #password = sha1.hexdigest()
-        #auth = firebase.FirebaseAuthentication(fbAuthSecretKey, username, password)
-        #firebase = firebase.FirebaseApplication('https://flaskmvc.firebaseio.com/', auth)
-        uVer = firebase.get('/users', 'vvvfr0ot')
-        return uVer['usern']
+        username = request.form['username']
+        uVer = firebase.get('/users', username)
+        password = request.form['password']
+        sha1 = hashlib.sha1()
+        sha1.update(password)
+        password = sha1.hexdigest()
+        if uVer['userp'] == password:
+            session['session'] = 1
+            return 'Welcome ' + uVer['usern']
     else:
         return redirect('/login')
-    #Using protected vars were able to return tokens based on what we want to get
-    #Prints or "returns" long string of information but can be decoded with json decoder
-    #Next to conform data
-    #user = auth.get_user()
-    #return user.firebase_auth_token
-
   
 #Page Renderings below
 #Trying to seperate the logic of the system from the display 
