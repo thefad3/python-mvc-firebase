@@ -39,6 +39,30 @@ def addUser():
     else:
         return redirect('/signup')
 
+@app.route('/addAction', methods=['GET', 'POST'])
+def addSecondary():
+    if request.method == 'POST':
+        if session['session']:
+            idx = uuid.uuid4()
+            uid = str(idx)
+            password = request.form['password']
+            username = request.form['username']
+            #Hash that Passsword
+            sha1 = hashlib.sha1()
+            sha1.update(password)
+            password = sha1.hexdigest()
+            #Database Directive
+            firebase.put('/users', username,
+            {
+            'uid': uid,
+            'usern': username,
+            'userp': password  
+            }
+            )
+            return redirect('/protected')
+        else:
+            return redirect('/protected')
+
 
 @app.route('/loginAction', methods=['GET', 'POST'])
 def loginAction():
@@ -75,6 +99,13 @@ def protect():
 def delete(id):
     firebase.delete('/users', id)
     return redirect("/protected")
+    
+@app.route('/adduser')
+def addPage():
+    if session['session']:
+        return render_template('add.html')
+    else:
+        return redirect('/protected')
 
 @app.route('/login')
 def loginPage():
