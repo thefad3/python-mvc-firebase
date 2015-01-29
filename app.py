@@ -28,7 +28,7 @@ def addUser():
         sha1.update(password)
         password = sha1.hexdigest()
         #Database Directive
-        fb.put('/users', username,
+        firebase.put('/users', username,
         {
         'uid': uid,
         'usern': username,
@@ -50,7 +50,7 @@ def loginAction():
         sha1.update(password)
         password = sha1.hexdigest()
         if uVer['userp'] == password:
-            session['session'] = 1
+            session['session'] = username
             return 'Welcome ' + uVer['usern']
     else:
         return redirect('/login')
