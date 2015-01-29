@@ -1,7 +1,19 @@
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
-<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" rel="stylesheet">
-
-<h3>jkshdfksdhj</h3>
-
-
-{{ data }}
+<!DOCTYPE html>
+    <head>
+        <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+        <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" rel="stylesheet">
+        <title>Welcome!</title>
+    </head>
+<body>
+<div class="container">
+<div class="row">
+    <h3>Welcome to the protected page {{ data['uname'] }}!</h3>
+<div class="col-md-4"></div>
+        <div class="col-md-4">
+            <a href="/logout" class="btn btn-primary btn-lg btn-block">Logout Bruh</a>
+        </div>
+<div class="col-md-4"></div>
+</div>
+</div>
+</body>
+</html>

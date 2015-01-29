@@ -51,7 +51,7 @@ def loginAction():
         password = sha1.hexdigest()
         if uVer['userp'] == password:
             session['session'] = username
-            return 'Welcome ' + uVer['usern']
+            return redirect('/protected')
     else:
         return redirect('/login')
   
@@ -65,18 +65,21 @@ def regForm():
 
 @app.route('/protected')
 def protect():
-    #udi = session['logged']
-    #Calls the location by the defined var
-    #Need to pass int he ID Some how...
-    udi = '/users/chrisl'
-    userInfo = firebase.get(udi, None)
-    jsonData = json.loads(userInfo)
-    return render_template('protected.html', data=jsonData)
+    if session['session']:
+        data = firebase.get('/users', username)
+        return render_template('protected.html', data=data)
+    else:
+        return redirect('/login')
 
 @app.route('/login')
 def loginPage():
     return render_template('login.html')
 
+@app.route('/logout')
+def logout():
+    session.pop('session', None)
+    return redirect('/login')
+    
 @app.route('/')
 def index():
     return render_template('index.html')

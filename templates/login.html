@@ -1,10 +1,27 @@
+<!DOCTYPE html>
+    <head>
+        <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+        <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" rel="stylesheet">
+        <title>Welcome!</title>
+    </head>
+<body>
+<div class="container">
+<div class="row">
+        <div class="col-md-4"></div>
+        <div class="col-md-4">
 <form enctype="multipart/form-data" action="/loginAction" method="post">
         <label>Username</label>
-        <input type="text" name="username" placeholder="Username">
+        <input type="text" name="username" class="form-control" placeholder="Username" required>
         <br>
         <label>Password</label>
-        <input type="password" name="password">
+        <input type="password" class="form-control" name="password" required>
         <br>
-        <input type="submit" value="Add User">
-        <a href="/">Cancel</a>
+        <input type="submit" class="btn btn-primary" value="Login">
+        <a href="/" class="btn btn-link active">Cancel</a>
 </form>
+</div>
+<div class="col-md-4"></div>
+</div>
+</div>
+</body>
+</html>
