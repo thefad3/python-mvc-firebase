@@ -8,6 +8,7 @@ import json
 import uuid 
 import hashlib
 from firebase import firebase
+from pprint import pprint
 from firebase_token_generator import create_token
 firebase = firebase.FirebaseApplication('https://flaskmvc.firebaseio.com/', None)
 app = Flask(__name__)
@@ -26,7 +27,7 @@ def addUser():
         sha1.update(password)
         password = sha1.hexdigest()
         #Database Directive
-        firebase.post(dbUrl,
+        firebase.put(dbUrl, uid,
         {
         'uid': uid,
         'usern': username,
@@ -41,9 +42,9 @@ def addUser():
 
 @app.route('/loginAction', methods=['GET', 'POST'])
 def loginAction():
-    firebase = firebase.FirebaseApplication('https://flaskmvc.firebaseio.com/', None)
     authentication = firebase.FirebaseAuthentication('x2uoh7WO7nzWKhgijadq18IPGbOTKRFxHJ4pX1JA', 'chrisl')
-    print uid
+    firebase = firebase.FirebaseApplication('https://flaskmvc.firebaseio.com/', authentication)
+    print authentication
 
 
         
@@ -62,7 +63,8 @@ def protect():
     #Need to pass int he ID Some how...
     udi = '/users/chrisl'
     userInfo = firebase.get(udi, None)
-    return render_template('protected.html', data=userInfo)
+    jsonData = json.loads(userInfo)
+    return render_template('protected.html', data=jsonData)
 
 @app.route('/login')
 def loginPage():
@@ -71,11 +73,6 @@ def loginPage():
 @app.route('/')
 def index():
     return render_template('index.html')
-
-    
-        
-    
-
 
 
 #The Line below is REQUIRED to run on C9    
