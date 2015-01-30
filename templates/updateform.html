@@ -9,20 +9,19 @@
 <div class="row">
         <div class="col-md-4"></div>
         <div class="col-md-4">
-        <h3>Sign Up</h3>
-        <h5>Enter a Username and Password below!</h5>
-        <hr width="100%">
-        <form enctype="multipart/form-data" action="/signupAction" method="post">
+            <h3>Update User {{ data['usern'] }}!</h3>
+            
+<form enctype="multipart/form-data" action="/updateAction/{{data['usern']}}" method="post">
         <label>Username</label>
-        <input type="text" name="username" class="form-control" placeholder="Username" required>
+        <input type="text" name="username" class="form-control" value="{{ data['usern'] }}" required>
         <br>
         <label>Password</label>
-        <input type="password" class="form-control" name="password" required>
+        <input type="password" class="form-control" name="password" value="{{ data['userp'] }}" required>
         <br>
-        <input type="submit" class="btn btn-primary" value="Sign Up">
+        <input type="submit" class="btn btn-primary" value="Update User!">
         <a href="/" class="btn btn-link active">Cancel</a>
-        </form>
-    </div>
+</form>
+</div>
 <div class="col-md-4"></div>
 </div>
 </div>

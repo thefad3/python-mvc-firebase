@@ -7,7 +7,7 @@
 <body>
 <div class="container">
 <div class="row">
-    <h3>Welcome to the protected page!</h3>
+    <h3>Welcome to the protected page {{session['username']}}!</h3>
     
             <hr>
         <h6><a href="/adduser" class="btn btn-primary btn-lg">+ Add User</a></h6>
@@ -21,7 +21,7 @@
         {% for x in data: %}
             <tr>
                     <td>{{ x }}</td>
-                    <td><a href="/updateForm/{{x}}" class="btn btn-primary">Edit</a></td>
+                    <td><a href="/updateForm/{{x}}"  class="btn btn-primary">Edit</a></td>
                     <td><a href="/delete/{{x}}" class="btn btn-danger" onClick='javascript:alert("This will Delete the Row");'>Delete</a></td>
             </tr>
 

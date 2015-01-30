@@ -79,6 +79,32 @@ def loginAction():
             return redirect('/protected')
     else:
         return redirect('/login')
+        
+@app.route('/updateForm/<id>')
+def updateForm(id):
+    if session['session']:
+        data = firebase.get('/users', id)
+    else: 
+        return redirect('/login')
+    return render_template('updateform.html', data=data)
+
+@app.route('/updateAction/<id>', methods=['GET', 'POST'])
+def updateAction(id):
+    username = request.form['username']
+    password = request.form['password']
+    sha1 = hashlib.sha1()
+    sha1.update(password)
+    password = sha1.hexdigest()
+    idx = uuid.uuid4()
+    uid = str(idx)
+    firebase.put('/users', username,
+    {
+            'uid': uid,
+            'usern': username,
+            'userp': password  
+    }
+    )
+    return redirect('/protected')
   
 #Page Renderings below
 #Trying to seperate the logic of the system from the display 
