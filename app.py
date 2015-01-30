@@ -149,6 +149,9 @@ def logout():
 def index():
     return render_template('index.html')
 
+@app.errorhandler(500)
+def serverError(error):
+    return render_template('500.html'), 500
 
 #The Line below is REQUIRED to run on C9    
 app.run(host=os.getenv('IP', '0.0.0.0'), port=int(os.getenv('PORT', 8080)))
